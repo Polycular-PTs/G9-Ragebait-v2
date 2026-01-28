@@ -12,11 +12,11 @@ Anmerkung Die letzte Version konnte nicht mit Makey Makey getestet werden, da ni
 
 Einzelne Features und Aufgabenteilung
 
-Kommentare/Martin
+*Kommentare/Martin*
 
 Erstellen der Graphischen Darstellung von Kommentaren. Erstellen eines Systems in welchen man Kommentar Info eingeben kann. Erstellen eines Systems welches Kommentare zufällig anordnet Schreiben der Kommentare Erstellen Profilbilder Zusammenfügen der 3 Projekte Erstellen der "Build" Szene GameObjects in Prefabs erstellen Editieren der Skripte für Funktion in einer Szene (zusammenarbeit der Systeme) Erstellen eines Skriptes welches die Graphischen Gameobjecte Aktiviert/Deaktiviert (Manager)
 
-Slider-Szene/Kinzy Pointinger
+*Slider-Szene/Kinzy Pointinger*
 
 A. SliderController In diesem Script programmierte Kinzy die Steuerung des Sliders über Tastatureingaben (A → links, D → rechts). Jede Bewegung verändert die Position des Reglers um einen festen Schritt innerhalb eines definierten Bereichs (der Länge der ScrollBar). Die Schrittzahl ist entscheidend für die anschließende Verarbeitung der Abstimmung.
 
@@ -28,7 +28,8 @@ D. CountdownUi Kinzy entwickelte eine eigene Countdown‑Komponente, die über e
 
 E. VoteManager Kinzy programmierte den VoteManager, der die gesamte Abstimmungslogik verwaltet. Er speichert die abgegebenen Stimmen in einem Integer‑Array, begrenzt Eingaben auf den Bereich von –5 bis +5 und nutzt PlayerPrefs, um die Votes dauerhaft zu speichern und auch nach Szenenwechseln beizubehalten.
 
-Grafische Darstellung/Caterina: Projektbeitrag: Entwicklung des interaktiven Abstimmungs-Diagramms Caterina hat die technische die Visualisierung der Benutzerabstimmungen ("How other Users voted") entwickelt. Sie war dafür verantwortlich, die Rohdaten in eine klare, proportionale grafische Darstellung zu übersetzen und das UI-Layout stabil zu halten.
+*Grafische Darstellung/Caterina:*
+Projektbeitrag: Entwicklung des interaktiven Abstimmungs-Diagramms Caterina hat die technische die Visualisierung der Benutzerabstimmungen ("How other Users voted") entwickelt. Sie war dafür verantwortlich, die Rohdaten in eine klare, proportionale grafische Darstellung zu übersetzen und das UI-Layout stabil zu halten.
 
 A. Dynamische Visualisierung der Abstimmungsergebnisse (BarManager.cs) Caterina entwickelte die Logik, mit der die kleinen farbigen Balken über der Skala (von -5 bis 5) generiert und skaliert werden: • Datenbasierte Skalierung: Sie implementierte eine Funktion, die die Höhe der Balken (z. B. bei den Werten -4, 2 und 3 im Bild) proportional zu den Abstimmungswerten berechnet. • Wachstumsrichtung: Durch die programmatische Setzung des Pivot-Punkts auf die Unterkante (0.5, 0) stellte sie sicher, dass die Balken korrekt von der schwarzen Basislinie nach oben wachsen. • Stabile Positionierung: Sie fixierte die Ankerpunkte der Balken an der Basis, damit diese auch bei einer Änderung der Diagrammgröße präzise auf der horizontalen Achse verankert bleiben. Berechnung der Balkenhöhe: Caterina nutzt eine mathematische Formel, um die Höhe der UI-Balken zu bestimmen. Dabei wird der Eingabewert (values[i]) durch 10 geteilt und mit einer maximalen Höhe von 200 Einheiten multipliziert. Das bedeutet: Ein Wert von 10 entspricht der vollen Höhe von 200 Pixeln. • Festlegung des Wachstumspunkts (Pivot): Sie setzt den Pivot-Punkt jedes Balkens programmatisch auf (0.5, 0). Dies ist entscheidend, damit sich die Balken beim Ändern der Höhe von der Grundlinie nach oben ausdehnen, anstatt von der Mitte aus in beide Richtungen zu wachsen. • Anpassung der Grafik (sizeDelta): Caterina verändert gezielt nur die Y-Komponente der sizeDelta, während die Breite der Balken (X-Achse) unverändert bleibt. Dadurch behalten alle Balken ihre einheitliche Dicke, während sie unterschiedliche Höhen einnehmen. • Horizontale Verankerung: Das Skript setzt die vertikalen Ankerpunkte (anchorMin.y und anchorMax.y) auf Null. Dies stellt sicher, dass alle Balken fest auf der unteren Basislinie des Diagramms stehen bleiben, unabhängig davon, wie groß das Fenster ist. • Sicherheitsabfrage (Schleife): Die for-Schleife ist so programmiert, dass sie nur so viele Balken aktualisiert, wie sowohl Bild-Objekte im Array als auch Datenwerte vorhanden sind. Dies verhindert Fehlermeldungen (Index-Fehler), falls die Anzahl der Daten nicht exakt mit der Anzahl der Balken übereinstimmt. • Datenabruf: Über den Befehl VoteManager.Instance.GetAllVotes() greift das Skript auf die aktuelle Datenbank der Nutzer-Abstimmungen zu und speichert diese in einem Array (currentVotes). • Visuelle Aktualisierung: Im letzten Schritt übergibt Caterina diese frischen Daten an die zuvor beschriebene Methode UpdateChart(currentVotes). Dadurch werden die Balken im Diagramm (wie im Bild zu sehen) sofort an die neuen Zahlen angepasst.
 
@@ -37,3 +38,47 @@ A. Dynamische Visualisierung der Abstimmungsergebnisse (BarManager.cs) Caterina 
 B. Layout-Struktur der Koordinatenachse (Anchor.cs) Um das Diagramm für verschiedene Bildschirmauflösungen robust zu machen, implementierte Caterina eine automatisierte Anker-Steuerung: • Achsen-Ausrichtung: Sie entwickelte ein Skript, das die schwarze Hauptachse sowie die Markierungen automatisch im UI zentriert. • Präzise Platzierung: Durch die Justierung der anchoredPosition stellte sie sicher, dass die Achse exakt an der gewünschten vertikalen Position im unteren Drittel des Bildschirms fixiert bleibt.
 
 C. Steuerung der Skalen-Beschriftung (XAxisLabels.cs) Caterina war für die dynamische Anordnung der Zahlenwerte (-5 bis 5) unterhalb der Hauptachse verantwortlich: • Zentrale Justierung: Sie erstellte ein System, mit dem der vertikale Abstand aller Zahlenbeschriftungen zur Achse über einen einzigen Parameter (xNumbers) gesteuert werden kann. • Dynamische Synchronisation: Die Logik stellt sicher, dass die Textfelder (TextMeshPro) in jedem Frame korrekt zur Achse ausgerichtet werden, was eine saubere und lesbare Skalierung unter den jeweiligen Balken garantiert.
+
+Screenshots
+
+1. Comment
+
+<img width="780" height="437" alt="Comment" src="https://github.com/user-attachments/assets/bda4b2bc-dbca-4192-9ce3-25f6051b4b77" />
+
+
+2. Slider
+
+
+![Slider](https://github.com/user-attachments/assets/6ab1bc2c-163a-4032-af0c-cf3c4ed7bc63)
+
+
+3. Grafische Darstellung
+
+<img width="851" height="582" alt="Graph2(1)" src="https://github.com/user-attachments/assets/8496de5e-8169-47da-b328-1e163aadb020" />
+
+
+Video 1:
+
+https://github.com/user-attachments/assets/b8840e70-5397-4819-9c51-0e9b4b185708
+
+
+Neues Video ist in  Files: "Features_Video.mp4" zu finden 
+
+
+
+Development Plattform
+
+Angabe der verwendeten Entwicklungsumgebung:
+
+•Unity Version: Unity 6000.0.57f1
+
+•Programmiersprache: C#
+
+•Betriebssysteme: Microsoft Windows 11 Home, Microsoft Windwos 11 Pro, Windows 11
+
+version 25H2
+
+Development Plattform
+
+Windows Standalone (spezifisch angepasst für den HoloTower der Schule HTBLuVA Salzburg)
+
